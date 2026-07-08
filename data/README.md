@@ -1,6 +1,6 @@
 # Data
 
-Raw operational data is not included in this public repository.
+Raw operational data is not included.
 
 The notebooks expect local input files from the senior design project, including:
 

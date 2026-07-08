@@ -207,9 +207,7 @@ The project applies verification and validation through:
 
 These checks are intended to confirm that the model behaves logically before route ranking is interpreted.
 
-## Repository Publication Decisions
-
-The original source folder contained many intermediate notebook versions, copies, and personal working filenames. For publication, the repository keeps only the cleaned workflow notebooks:
+## Notebook Set
 
 - route data preparation
 - all-routes simulation
@@ -217,7 +215,7 @@ The original source folder contained many intermediate notebook versions, copies
 - model verification
 - model validation
 
-Notebook outputs were stripped to keep the repository small and to avoid committing embedded figures, private data previews, or accidental sensitive strings.
+Notebook outputs are removed to keep the files lightweight.
 
 ## Reproducibility Notes
 

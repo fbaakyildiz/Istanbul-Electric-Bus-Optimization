@@ -1,6 +1,6 @@
 # Notebooks
 
-The original working folder contained multiple drafts, personal copies, and experimental notebook names. This directory keeps a cleaned publication set with stable names.
+This directory contains the main project notebooks.
 
 ## Files
 
@@ -10,4 +10,4 @@ The original working folder contained multiple drafts, personal copies, and expe
 - `04_model_verification.ipynb` - checks simulation logic and route behavior.
 - `05_model_validation.ipynb` - validates simulation behavior through sensitivity and edge-case scenarios.
 
-Notebook outputs were removed before publication.
+Notebook outputs are removed to keep the files lightweight.

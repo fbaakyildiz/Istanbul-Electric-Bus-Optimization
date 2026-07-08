@@ -53,11 +53,11 @@ This project addresses the decision problem with a route-level discrete-event si
 4. `04_model_verification.ipynb` checks model structure and simulation behavior.
 5. `05_model_validation.ipynb` validates model behavior under passenger, slope, and no-passenger scenarios.
 
-The notebooks were renamed and output-stripped for publication. Original class/project filenames, copies, and intermediate versions were intentionally excluded to keep the repository readable.
+Notebook outputs are removed to keep the files lightweight.
 
 ## Data Availability
 
-The public repository does not include raw IETT operational datasets or API-derived route files. Some notebooks refer to local Excel inputs used during the senior design project. These data files should be placed under `data/raw/` when reproducing the analysis locally.
+Raw IETT operational datasets and API-derived route files are not included. Some notebooks refer to local Excel inputs used during the senior design project. Place those files under `data/raw/` when reproducing the analysis locally.
 
 See [data/README.md](data/README.md) for the expected data categories.
 
