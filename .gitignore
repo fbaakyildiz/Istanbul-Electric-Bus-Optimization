@@ -1,0 +1,14 @@
+.DS_Store
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.env
+.env.*
+data/raw/
+data/processed/
+data/outputs/
+*.xlsx
+*.xls
+*.csv
+*.graphml
+*.html

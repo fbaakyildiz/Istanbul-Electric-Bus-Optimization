@@ -1,0 +1,11 @@
+simpy
+pandas
+numpy
+matplotlib
+seaborn
+scipy
+requests
+osmnx
+networkx
+openpyxl
+jupyter
