@@ -66,13 +66,158 @@
       .button.primary { background: var(--dark); color: #fff; }
       .button.secondary { border: 1px solid var(--line); background: #fff; }
       .panel { border: 1px solid rgba(217,224,236,0.9); border-radius: 22px; background: rgba(255,255,255,0.8); box-shadow: var(--shadow); padding: 18px; }
-      .metric { border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; padding: 28px; }
-      .metric span { display: block; font-family: "IBM Plex Mono", monospace; font-size: 54px; font-weight: 600; line-height: 1; }
-      .metric small { color: rgba(255,255,255,0.76); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-      .panel-grid { display: grid; gap: 10px; margin-top: 12px; }
+      .simulation-panel {
+        position: relative;
+        overflow: hidden;
+        border-color: rgba(255,255,255,0.72);
+        border-radius: 28px;
+        background:
+          radial-gradient(circle at 8% 0%, rgba(22,163,74,0.24), transparent 32%),
+          radial-gradient(circle at 92% 10%, rgba(31,78,95,0.22), transparent 34%),
+          linear-gradient(145deg, rgba(255,255,255,0.82), rgba(236,253,245,0.58)),
+          rgba(255,255,255,0.68);
+        backdrop-filter: blur(18px) saturate(1.14);
+      }
+      .simulation-panel::before {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(31,78,95,0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(31,78,95,0.045) 1px, transparent 1px);
+        background-size: 34px 34px;
+        content: "";
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0.58), transparent 86%);
+      }
+      .simulation-panel > * { position: relative; z-index: 1; }
+      .sim-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+      .sim-title span, .sim-title strong { display: block; }
+      .sim-title span { color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+      .sim-title strong { margin-top: 4px; color: var(--primary); font-size: 19px; line-height: 1.1; }
+      .sim-badge {
+        display: inline-flex;
+        min-height: 34px;
+        align-items: center;
+        border: 1px solid rgba(22,163,74,0.2);
+        border-radius: 999px;
+        background: rgba(220,252,231,0.74);
+        color: #166534;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 0 10px;
+      }
+      .route-board {
+        position: relative;
+        overflow: hidden;
+        min-height: 258px;
+        border: 1px solid rgba(31,78,95,0.12);
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at 18% 24%, rgba(22,163,74,0.12), transparent 24%),
+          linear-gradient(145deg, rgba(255,255,255,0.76), rgba(248,250,252,0.7));
+        padding: 16px;
+      }
+      .route-svg { display: block; width: 100%; height: 150px; overflow: visible; }
+      .city-shore { fill: none; stroke: rgba(31,78,95,0.16); stroke-width: 5; stroke-linecap: round; }
+      .route-shadow { fill: none; stroke: rgba(15,23,42,0.12); stroke-width: 13; stroke-linecap: round; stroke-linejoin: round; }
+      .route-line {
+        fill: none;
+        stroke: url(#routeGradient);
+        stroke-width: 7;
+        stroke-dasharray: 14 12;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        animation: routeFlow 2.8s linear infinite;
+      }
+      .route-stop { fill: #fff; stroke: var(--primary); stroke-width: 4; }
+      .route-stop.final { stroke: var(--accent); }
+      .bus-dot {
+        position: absolute;
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,0.8);
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        box-shadow: 0 14px 26px rgba(31,78,95,0.24);
+        color: #fff;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .bus-dot.one { left: 16%; top: 118px; animation: busPulse 2.8s ease-in-out infinite; }
+      .bus-dot.two { right: 18%; top: 74px; animation: busPulse 2.8s ease-in-out 1.1s infinite; }
+      .route-caption {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        gap: 9px;
+        margin-top: 8px;
+      }
+      .route-caption div {
+        min-height: 58px;
+        border: 1px solid rgba(31,78,95,0.1);
+        border-radius: 16px;
+        background: rgba(255,255,255,0.68);
+        padding: 10px;
+      }
+      .route-caption strong, .route-caption span { display: block; }
+      .route-caption strong { color: var(--primary); font-family: "IBM Plex Mono", monospace; font-size: 15px; }
+      .route-caption span { margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+      .sim-flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0,1fr));
+        gap: 7px;
+        margin: 13px 0;
+      }
+      .sim-flow div {
+        position: relative;
+        min-height: 62px;
+        border: 1px solid rgba(31,78,95,0.12);
+        border-radius: 16px;
+        background: rgba(255,255,255,0.72);
+        padding: 10px;
+      }
+      .sim-flow div:not(:last-child)::after {
+        position: absolute;
+        top: 50%;
+        right: -8px;
+        width: 9px;
+        height: 2px;
+        background: rgba(31,78,95,0.28);
+        content: "";
+      }
+      .sim-flow strong, .sim-flow span { display: block; }
+      .sim-flow strong { color: var(--dark); font-size: 12px; line-height: 1.15; }
+      .sim-flow span { margin-bottom: 7px; color: var(--accent); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 800; }
+      .sim-readouts { display: grid; gap: 9px; }
+      .sim-readout {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+        border: 1px solid rgba(31,78,95,0.1);
+        border-radius: 16px;
+        background: rgba(255,255,255,0.72);
+        padding: 11px 12px;
+      }
+      .readout-label { color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; }
+      .readout-value { color: var(--primary); font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 700; }
+      .charge-track { grid-column: 1 / -1; height: 8px; overflow: hidden; border-radius: 999px; background: rgba(31,78,95,0.12); }
+      .charge-fill { display: block; width: var(--fill); height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #86efac); transform-origin: left center; }
+      @keyframes routeFlow { to { stroke-dashoffset: -52; } }
+      @keyframes busPulse {
+        0%, 100% { transform: translate3d(0,0,0) scale(1); }
+        50% { transform: translate3d(8px,-7px,0) scale(1.05); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .route-line,
+        .bus-dot {
+          animation: none;
+        }
+      }
       .panel-grid div, .steps-grid article { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); padding: 16px; }
-      .panel-grid strong, .panel-grid span { display: block; }
-      .panel-grid span { margin-top: 4px; color: var(--muted); font-size: 14px; }
       .section { border-top: 1px solid var(--line); padding: 58px 0; }
       .section.dark { width: calc(100% + 48px); margin-left: -24px; border-radius: 24px; background: var(--dark); color: #fff; padding: 58px 24px; }
       .section.dark .eyebrow { color: #8bf0b0; }
@@ -85,8 +230,8 @@
       .section.dark .steps-grid p { color: rgba(255,255,255,0.72); }
       footer { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; padding: 28px 0 40px; }
       footer a { color: var(--dark); font-weight: 800; }
-      @media (max-width: 920px) { .hero, .steps-grid { grid-template-columns: 1fr; } }
-      @media (max-width: 680px) { .site-header, footer { align-items: flex-start; flex-direction: column; } nav { justify-content: flex-start; } h1 { font-size: 40px; } .button { width: 100%; } .hero::before { right: -168px; bottom: -18px; width: 280px; opacity: 0.26; } }
+      @media (max-width: 920px) { .hero, .steps-grid { grid-template-columns: 1fr; } .sim-flow { grid-template-columns: repeat(5, minmax(94px,1fr)); overflow-x: auto; padding-bottom: 3px; } }
+      @media (max-width: 680px) { .site-header, footer { align-items: flex-start; flex-direction: column; } nav { justify-content: flex-start; } h1 { font-size: 40px; } .button { width: 100%; } .hero::before { right: -168px; bottom: -18px; width: 280px; opacity: 0.26; } .route-caption { grid-template-columns: 1fr; } .route-board { min-height: 292px; } .bus-dot.two { right: 12%; } }
     </style>
   </head>
   <body>
@@ -116,13 +261,60 @@
             <a class="button secondary" href="https://github.com/fbaakyildiz/Istanbul-Electric-Bus-Optimization/blob/main/docs/DESIGN.md" target="_blank" rel="noreferrer">Read design</a>
           </div>
         </div>
-        <aside class="panel" aria-label="Project summary">
-          <div class="metric"><span>SimPy</span><small>discrete-event model</small></div>
-          <div class="panel-grid">
-            <div><strong>Method</strong><span>Route-level simulation, replications, confidence intervals, staged ranking</span></div>
-            <div><strong>Domain</strong><span>Istanbul public transportation, battery-electric buses, depot charging</span></div>
-            <div><strong>Output</strong><span>Route feasibility, fleet comparison, emissions reduction, deployment stages</span></div>
-            <div><strong>Scenario</strong><span>BYD K8, Karsan e-ATAK, diesel baseline, summer and winter operation</span></div>
+        <aside class="panel simulation-panel" aria-label="Electric bus simulation diagram">
+          <div class="sim-header">
+            <div class="sim-title">
+              <span>Simulation cockpit</span>
+              <strong>Route feasibility model</strong>
+            </div>
+            <div class="sim-badge">SimPy DES</div>
+          </div>
+
+          <div class="route-board">
+            <svg class="route-svg" viewBox="0 0 440 180" aria-hidden="true">
+              <defs>
+                <linearGradient id="routeGradient" x1="42" y1="126" x2="396" y2="48" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#1f4e5f" />
+                  <stop offset="0.55" stop-color="#0d9488" />
+                  <stop offset="1" stop-color="#16a34a" />
+                </linearGradient>
+              </defs>
+              <path class="city-shore" d="M24 144 C76 116 112 146 164 116 C212 88 240 108 278 76 C322 40 372 52 420 24" />
+              <path class="route-shadow" d="M42 128 C92 96 134 126 178 94 C222 62 256 94 296 66 C334 38 366 48 398 36" />
+              <path class="route-line" d="M42 128 C92 96 134 126 178 94 C222 62 256 94 296 66 C334 38 366 48 398 36" />
+              <circle class="route-stop" cx="42" cy="128" r="10" />
+              <circle class="route-stop" cx="178" cy="94" r="10" />
+              <circle class="route-stop" cx="296" cy="66" r="10" />
+              <circle class="route-stop final" cx="398" cy="36" r="10" />
+            </svg>
+            <div class="bus-dot one">E</div>
+            <div class="bus-dot two">D</div>
+            <div class="route-caption">
+              <div><strong>Route</strong><span>distance + slope</span></div>
+              <div><strong>Load</strong><span>passenger demand</span></div>
+              <div><strong>Depot</strong><span>charging cycle</span></div>
+            </div>
+          </div>
+
+          <div class="sim-flow" aria-label="Simulation logic">
+            <div><span>01</span><strong>Route geometry</strong></div>
+            <div><span>02</span><strong>Passenger arrivals</strong></div>
+            <div><span>03</span><strong>Energy draw</strong></div>
+            <div><span>04</span><strong>Charging queue</strong></div>
+            <div><span>05</span><strong>Fleet rank</strong></div>
+          </div>
+
+          <div class="sim-readouts">
+            <div class="sim-readout">
+              <span class="readout-label">Battery reserve</span><strong class="readout-value">winter stress</strong>
+              <span class="charge-track"><span class="charge-fill" style="--fill: 68%"></span></span>
+            </div>
+            <div class="sim-readout">
+              <span class="readout-label">Scenario set</span><strong class="readout-value">BYD · Karsan · diesel</strong>
+            </div>
+            <div class="sim-readout">
+              <span class="readout-label">Decision output</span><strong class="readout-value">staged deployment</strong>
+            </div>
           </div>
         </aside>
       </section>
