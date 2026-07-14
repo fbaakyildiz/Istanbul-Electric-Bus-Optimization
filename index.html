@@ -76,6 +76,7 @@
           radial-gradient(circle at 92% 10%, rgba(31,78,95,0.22), transparent 34%),
           linear-gradient(145deg, rgba(255,255,255,0.82), rgba(236,253,245,0.58)),
           rgba(255,255,255,0.68);
+        box-shadow: var(--shadow);
         padding: 20px;
         backdrop-filter: blur(18px) saturate(1.14);
       }
@@ -111,7 +112,6 @@
       .route-board {
         position: relative;
         overflow: hidden;
-        min-height: 318px;
         border: 1px solid rgba(31,78,95,0.12);
         border-radius: 24px;
         background:
@@ -120,6 +120,17 @@
           linear-gradient(145deg, rgba(255,255,255,0.76), rgba(248,250,252,0.7));
         padding: 16px;
       }
+      .route-board::before {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, rgba(31,78,95,0.045) 1px, transparent 1px),
+          linear-gradient(rgba(31,78,95,0.045) 1px, transparent 1px);
+        background-size: 28px 28px;
+        content: "";
+        mask-image: linear-gradient(120deg, rgba(0,0,0,0.58), transparent 82%);
+      }
+      .route-board > * { position: relative; z-index: 1; }
       .route-map-label {
         display: flex;
         justify-content: space-between;
@@ -131,9 +142,10 @@
         letter-spacing: 0.06em;
         text-transform: uppercase;
       }
-      .route-svg { display: block; width: 100%; height: 172px; overflow: visible; }
-      .city-shore { fill: none; stroke: rgba(31,78,95,0.14); stroke-width: 5; stroke-linecap: round; }
-      .route-shadow { fill: none; stroke: rgba(15,23,42,0.1); stroke-width: 15; stroke-linecap: round; stroke-linejoin: round; }
+      .route-svg { display: block; width: 100%; height: 204px; overflow: visible; }
+      .city-shore { fill: none; stroke: rgba(31,78,95,0.12); stroke-width: 5; stroke-linecap: round; }
+      .waterway { fill: none; stroke: rgba(14,165,233,0.12); stroke-width: 28; stroke-linecap: round; }
+      .route-shadow { fill: none; stroke: rgba(15,23,42,0.1); stroke-width: 16; stroke-linecap: round; stroke-linejoin: round; }
       .route-line {
         fill: none;
         stroke: url(#routeGradient);
@@ -152,79 +164,26 @@
       }
       .route-stop { fill: #fff; stroke: var(--primary); stroke-width: 4; }
       .route-stop.final { stroke: var(--accent); }
-      .depot-node {
-        position: absolute;
-        right: 12%;
-        top: 54px;
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        border: 1px solid rgba(22,163,74,0.24);
-        border-radius: 999px;
-        background: rgba(236,253,245,0.88);
-        box-shadow: 0 16px 32px rgba(22,163,74,0.12);
-        color: #166534;
-        font-size: 11px;
-        font-weight: 800;
-        padding: 8px 10px;
-      }
-      .depot-node::before {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: var(--accent);
-        box-shadow: 0 0 0 6px rgba(22,163,74,0.14);
-        content: "";
-      }
-      .vehicle {
-        position: absolute;
-        display: grid;
-        width: 58px;
-        height: 34px;
-        place-items: center;
-        border: 1px solid rgba(255,255,255,0.84);
-        border-radius: 12px;
-        box-shadow: 0 16px 30px rgba(31,78,95,0.24);
-        color: #fff;
-        font-family: "IBM Plex Mono", monospace;
-        font-size: 11px;
-        font-weight: 800;
-        transform: translate(-50%, -50%);
-      }
-      .vehicle::before {
-        position: absolute;
-        top: 8px;
-        left: 9px;
-        right: 14px;
-        height: 6px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.44);
-        content: "";
-      }
-      .vehicle::after {
-        position: absolute;
-        right: 7px;
-        bottom: 7px;
-        width: 6px;
-        height: 6px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.8);
-        content: "";
-      }
-      .vehicle.ev {
-        background: linear-gradient(135deg, #0f766e, var(--accent));
-        animation: evRoute 9s cubic-bezier(.45,0,.2,1) infinite;
-      }
-      .vehicle.diesel {
-        background: linear-gradient(135deg, #334155, var(--primary));
-        animation: dieselRoute 9s cubic-bezier(.45,0,.2,1) 2.4s infinite;
-        opacity: 0.86;
-      }
+      .route-stop-ring { fill: none; stroke: rgba(22,163,74,0.22); stroke-width: 10; }
+      .depot-shape { fill: #ecfdf5; stroke: #16a34a; stroke-width: 3; }
+      .depot-bolt { fill: #16a34a; }
+      .map-label { fill: #526178; font-family: Inter, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+      .map-label.depot-label { fill: #15803d; }
+      .route-vehicle .bus-shell { stroke: rgba(255,255,255,0.9); stroke-width: 2; }
+      .route-vehicle .bus-window { fill: rgba(255,255,255,0.54); }
+      .route-vehicle .bus-wheel { fill: #0f172a; stroke: rgba(255,255,255,0.76); stroke-width: 1.5; }
+      .route-vehicle.ev .bus-shell { fill: url(#electricBusGradient); }
+      .route-vehicle.diesel .bus-shell { fill: url(#dieselBusGradient); }
+      .route-vehicle { filter: drop-shadow(0 8px 8px rgba(15,23,42,0.22)); }
+      .route-legend { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 3px; }
+      .route-legend span { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(31,78,95,0.1); border-radius: 999px; background: rgba(255,255,255,0.7); color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 700; padding: 6px 8px; }
+      .route-legend i { width: 7px; height: 7px; border-radius: 999px; background: var(--primary); box-shadow: 0 0 0 4px rgba(31,78,95,0.1); }
+      .route-legend .ev-key i { background: var(--accent); box-shadow: 0 0 0 4px rgba(22,163,74,0.12); }
       .scenario-strip {
         display: grid;
         grid-template-columns: repeat(3, minmax(0,1fr));
         gap: 8px;
-        margin-top: 6px;
+        margin-top: 12px;
       }
       .scenario-tile {
         border: 1px solid rgba(31,78,95,0.1);
@@ -249,25 +208,9 @@
         line-height: 1.25;
         text-transform: uppercase;
       }
-      .route-caption {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0,1fr));
-        gap: 9px;
-        margin-top: 10px;
-      }
-      .route-caption div {
-        min-height: 58px;
-        border: 1px solid rgba(31,78,95,0.1);
-        border-radius: 16px;
-        background: rgba(255,255,255,0.68);
-        padding: 10px;
-      }
-      .route-caption strong, .route-caption span { display: block; }
-      .route-caption strong { color: var(--primary); font-family: "IBM Plex Mono", monospace; font-size: 15px; }
-      .route-caption span { margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; }
       .sim-flow {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0,1fr));
+        grid-template-columns: repeat(3, minmax(0,1fr));
         gap: 8px;
         margin: 14px 0;
       }
@@ -284,14 +227,14 @@
       .sim-flow div:not(:last-child)::after {
         position: absolute;
         top: 50%;
-        right: -8px;
+        right: -9px;
         width: 9px;
         height: 2px;
         background: rgba(31,78,95,0.28);
         content: "";
       }
       .sim-flow strong, .sim-flow span { display: block; }
-      .sim-flow strong { color: var(--dark); font-size: 12px; line-height: 1.15; }
+      .sim-flow strong { color: var(--dark); font-size: 12px; line-height: 1.22; }
       .sim-flow span { margin-bottom: 7px; color: var(--accent); font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 800; }
       .sim-readouts { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
       .sim-readout {
@@ -309,30 +252,16 @@
       .charge-track { grid-column: 1 / -1; height: 8px; overflow: hidden; border-radius: 999px; background: rgba(31,78,95,0.12); }
       .charge-fill { display: block; width: var(--fill); height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), #86efac); transform-origin: left center; animation: chargeBreath 3.8s ease-in-out infinite; }
       @keyframes routeFlow { to { stroke-dashoffset: -52; } }
-      @keyframes evRoute {
-        0% { left: 9%; top: 63%; }
-        24% { left: 30%; top: 47%; }
-        48% { left: 50%; top: 55%; }
-        72% { left: 69%; top: 35%; }
-        100% { left: 88%; top: 22%; }
-      }
-      @keyframes dieselRoute {
-        0% { left: 88%; top: 22%; }
-        24% { left: 69%; top: 35%; }
-        48% { left: 50%; top: 55%; }
-        72% { left: 30%; top: 47%; }
-        100% { left: 9%; top: 63%; }
-      }
       @keyframes chargeBreath {
         0%, 100% { transform: scaleX(0.9); opacity: 0.78; }
         50% { transform: scaleX(1); opacity: 1; }
       }
       @media (prefers-reduced-motion: reduce) {
         .route-line,
-        .vehicle,
         .charge-fill {
           animation: none;
         }
+        .route-vehicle { display: none; }
       }
       .panel-grid div, .steps-grid article { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); padding: 16px; }
       .section { border-top: 1px solid var(--line); padding: 58px 0; }
@@ -347,8 +276,8 @@
       .section.dark .steps-grid p { color: rgba(255,255,255,0.72); }
       footer { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; padding: 28px 0 40px; }
       footer a { color: var(--dark); font-weight: 800; }
-      @media (max-width: 920px) { .hero, .steps-grid { grid-template-columns: 1fr; } .sim-flow { grid-template-columns: repeat(5, minmax(94px,1fr)); overflow-x: auto; padding-bottom: 3px; } }
-      @media (max-width: 680px) { .site-header, footer { align-items: flex-start; flex-direction: column; } nav { justify-content: flex-start; } h1 { font-size: 40px; } .button { width: 100%; } .hero::before { right: -168px; bottom: -18px; width: 280px; opacity: 0.26; } .route-caption, .scenario-strip, .sim-readouts { grid-template-columns: 1fr; } .route-board { min-height: 382px; } .depot-node { right: 8%; } }
+      @media (max-width: 920px) { .hero, .steps-grid { grid-template-columns: 1fr; } }
+      @media (max-width: 680px) { body { overflow-x: hidden; } .site-header, footer { align-items: flex-start; flex-direction: column; } nav { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0,1fr)); justify-content: stretch; } nav a, nav a.github-nav-link { display: inline-flex; width: auto; min-width: 0; justify-content: center; white-space: nowrap; } h1 { font-size: 40px; } .button { width: 100%; } .hero::before { right: -168px; bottom: -18px; width: 280px; opacity: 0.26; } .scenario-strip, .sim-readouts { grid-template-columns: 1fr; } .route-board { padding: 14px; } .route-map-label { align-items: flex-start; flex-direction: column; gap: 4px; } .route-svg { height: 182px; } .sim-flow { grid-template-columns: 1fr; } .sim-flow div:not(:last-child)::after { top: auto; right: auto; bottom: -8px; left: 50%; width: 2px; height: 9px; } }
     </style>
   </head>
   <body>
@@ -378,7 +307,7 @@
             <a class="button secondary" href="https://github.com/fbaakyildiz/Istanbul-Electric-Bus-Optimization/blob/main/docs/DESIGN.md" target="_blank" rel="noreferrer">Read design</a>
           </div>
         </div>
-        <aside class="panel simulation-panel" aria-label="Electric bus simulation diagram">
+        <div class="simulation-panel" role="region" aria-label="Electric bus simulation diagram">
           <div class="sim-header">
             <div class="sim-title">
               <span>Simulation cockpit</span>
@@ -389,44 +318,64 @@
 
           <div class="route-board">
             <div class="route-map-label"><span>Historical peninsula pilot routes</span><span>Depot charging model</span></div>
-            <svg class="route-svg" viewBox="0 0 440 180" aria-hidden="true">
+            <svg class="route-svg" viewBox="0 0 440 210" aria-hidden="true">
               <defs>
-                <linearGradient id="routeGradient" x1="42" y1="126" x2="396" y2="48" gradientUnits="userSpaceOnUse">
+                <linearGradient id="routeGradient" x1="42" y1="154" x2="400" y2="50" gradientUnits="userSpaceOnUse">
                   <stop offset="0" stop-color="#1f4e5f" />
                   <stop offset="0.55" stop-color="#0d9488" />
                   <stop offset="1" stop-color="#16a34a" />
                 </linearGradient>
+                <linearGradient id="electricBusGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f766e" /><stop offset="1" stop-color="#16a34a" /></linearGradient>
+                <linearGradient id="dieselBusGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#334155" /><stop offset="1" stop-color="#1f4e5f" /></linearGradient>
+                <path id="routePath" d="M42 154 C92 118 134 148 178 112 C222 76 258 106 298 78 C336 50 368 62 400 50" />
+                <path id="returnPath" d="M400 50 C368 62 336 50 298 78 C258 106 222 76 178 112 C134 148 92 118 42 154" />
               </defs>
-              <path class="city-shore" d="M18 154 C72 120 116 146 166 116 C214 88 242 112 282 78 C326 42 372 54 422 24" />
-              <path class="route-energy" d="M42 136 C92 100 134 130 178 96 C222 62 258 96 298 68 C336 38 368 50 400 38" />
-              <path class="route-shadow" d="M42 136 C92 100 134 130 178 96 C222 62 258 96 298 68 C336 38 368 50 400 38" />
-              <path class="route-line" d="M42 136 C92 100 134 130 178 96 C222 62 258 96 298 68 C336 38 368 50 400 38" />
-              <circle class="route-stop" cx="42" cy="136" r="10" />
-              <circle class="route-stop" cx="178" cy="96" r="10" />
-              <circle class="route-stop" cx="298" cy="68" r="10" />
-              <circle class="route-stop final" cx="400" cy="38" r="10" />
+              <path class="waterway" d="M20 181 C96 145 144 179 202 148 C270 112 324 142 420 108" />
+              <path class="city-shore" d="M18 174 C72 140 116 166 166 136 C214 108 242 132 282 98 C326 62 372 74 422 44" />
+              <use class="route-energy" href="#routePath" />
+              <use class="route-shadow" href="#routePath" />
+              <use class="route-line" href="#routePath" />
+              <circle class="route-stop-ring" cx="42" cy="154" r="14" />
+              <circle class="route-stop" cx="42" cy="154" r="8" />
+              <circle class="route-stop" cx="178" cy="112" r="8" />
+              <circle class="route-stop" cx="298" cy="78" r="8" />
+              <circle class="route-stop-ring" cx="400" cy="50" r="14" />
+              <circle class="route-stop final" cx="400" cy="50" r="8" />
+              <g transform="translate(360 118)">
+                <rect class="depot-shape" x="0" y="0" width="42" height="32" rx="9" />
+                <path class="depot-bolt" d="M23 7 14 19h7l-3 8 10-13h-7z" />
+                <text class="map-label depot-label" x="21" y="48" text-anchor="middle">Depot</text>
+              </g>
+              <text class="map-label" x="42" y="183" text-anchor="middle">Route start</text>
+              <text class="map-label" x="400" y="77" text-anchor="middle">Terminal</text>
+              <g class="route-vehicle ev">
+                <rect class="bus-shell" x="-17" y="-9" width="34" height="18" rx="5" />
+                <rect class="bus-window" x="-8" y="-5" width="15" height="5" rx="2" />
+                <circle class="bus-wheel" cx="-10" cy="10" r="3.5" />
+                <circle class="bus-wheel" cx="10" cy="10" r="3.5" />
+                <animateMotion dur="9s" repeatCount="indefinite" rotate="auto"><mpath href="#routePath" /></animateMotion>
+              </g>
+              <g class="route-vehicle diesel">
+                <rect class="bus-shell" x="-17" y="-9" width="34" height="18" rx="5" />
+                <rect class="bus-window" x="-8" y="-5" width="15" height="5" rx="2" />
+                <circle class="bus-wheel" cx="-10" cy="10" r="3.5" />
+                <circle class="bus-wheel" cx="10" cy="10" r="3.5" />
+                <animateMotion begin="-4.5s" dur="9s" repeatCount="indefinite" rotate="auto"><mpath href="#returnPath" /></animateMotion>
+              </g>
             </svg>
-            <div class="depot-node">Depot</div>
-            <div class="vehicle ev">EV</div>
-            <div class="vehicle diesel">DSL</div>
-            <div class="scenario-strip" aria-label="Scenario inputs">
-              <div class="scenario-tile"><strong>BYD K8</strong><span>high-capacity battery case</span></div>
-              <div class="scenario-tile"><strong>e-ATAK</strong><span>compact route alternative</span></div>
-              <div class="scenario-tile"><strong>Diesel</strong><span>baseline comparator</span></div>
-            </div>
-            <div class="route-caption">
-              <div><strong>Route</strong><span>distance + slope</span></div>
-              <div><strong>Load</strong><span>passenger demand</span></div>
-              <div><strong>Depot</strong><span>charging cycle</span></div>
-            </div>
+            <div class="route-legend" aria-label="Route map legend"><span class="ev-key"><i></i>electric bus</span><span><i></i>diesel baseline</span><span><i></i>route + stops</span></div>
+          </div>
+
+          <div class="scenario-strip" aria-label="Vehicle scenarios">
+            <div class="scenario-tile"><strong>BYD K8</strong><span>high-capacity battery case</span></div>
+            <div class="scenario-tile"><strong>e-ATAK</strong><span>compact route alternative</span></div>
+            <div class="scenario-tile"><strong>Diesel</strong><span>baseline comparator</span></div>
           </div>
 
           <div class="sim-flow" aria-label="Simulation logic">
-            <div><span>01</span><strong>Route geometry</strong></div>
-            <div><span>02</span><strong>Passenger arrivals</strong></div>
-            <div><span>03</span><strong>Energy draw</strong></div>
-            <div><span>04</span><strong>Charging queue</strong></div>
-            <div><span>05</span><strong>Fleet rank</strong></div>
+            <div><span>01</span><strong>Route and demand</strong></div>
+            <div><span>02</span><strong>Energy and charging</strong></div>
+            <div><span>03</span><strong>Fleet decision</strong></div>
           </div>
 
           <div class="sim-readouts">
@@ -445,7 +394,7 @@
               <span class="readout-label">Impact readout</span><strong class="readout-value">CO2 delta</strong>
             </div>
           </div>
-        </aside>
+        </div>
       </section>
 
       <section class="section" id="method">
